@@ -22,9 +22,6 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString *const MHCustomTabBarControllerViewControllerChangedNotification;
-extern NSString *const MHCustomTabBarControllerViewControllerAlreadyVisibleNotification;
-
 @interface MHCustomTabBarController : UIViewController
 
 @property (weak,nonatomic) UIViewController *destinationViewController;
@@ -32,5 +29,7 @@ extern NSString *const MHCustomTabBarControllerViewControllerAlreadyVisibleNotif
 @property (strong, nonatomic) UIViewController *oldViewController;
 @property (weak, nonatomic) IBOutlet UIView *container;
 @property (nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
+@property (assign, nonatomic) NSInteger selectedIndex;
 
+- (void)loadViewControllerForSeguegue:(UIStoryboardSegue *)segue triggeredWithButton:(UIButton *)button;
 @end
