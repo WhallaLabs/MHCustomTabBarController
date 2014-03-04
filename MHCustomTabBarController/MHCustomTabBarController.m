@@ -66,7 +66,7 @@
 
 
 #pragma mark - Segue
-- (void)loadViewControllerForSeguegue:(UIStoryboardSegue *)segue triggeredWithButton:(UIButton *)button {
+- (void)loadViewControllerForSeguegue:(MHTabBarSegue *)segue triggeredWithButton:(UIButton *)button {
     self.oldViewController = self.destinationViewController;
     
     //if view controller isn't already contained in the viewControllers-Dictionary
@@ -78,7 +78,14 @@
         [aButton setSelected:NO];
     }
     
+    NSInteger previousSelectedIndex = _selectedIndex;
     _selectedIndex = [[self buttons] indexOfObject:button];
+    
+    if (previousSelectedIndex < [self selectedIndex]) {
+        [segue setAnimationDirection:MHTabBarSegueAnimationDirectionRight];
+    } else {
+        [segue setAnimationDirection:MHTabBarSegueAnimationDirectionLeft];
+    }
     
     [button setSelected:YES];
     self.destinationIdentifier = segue.identifier;
@@ -86,7 +93,6 @@
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-   
     if (![segue isKindOfClass:[MHTabBarSegue class]]) {
         [super prepareForSegue:segue sender:sender];
         return;
@@ -98,7 +104,7 @@
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([self.destinationIdentifier isEqual:identifier]) {
+    if ([self.destinationIdentifier isEqual:identifier] || [self isTransitioning]) {
         //Dont perform segue, if visible ViewController is already the destination ViewController
         return NO;
     }

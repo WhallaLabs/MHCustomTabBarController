@@ -27,19 +27,44 @@
 - (void) perform {
     MHCustomTabBarController *tabBarViewController = (MHCustomTabBarController *)self.sourceViewController;
     UIViewController *destinationViewController = (UIViewController *) tabBarViewController.destinationViewController;
+    UIViewController *previousViewController = tabBarViewController.oldViewController;
+    
+    [[destinationViewController view] setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
 
-    //remove old viewController
-    if (tabBarViewController.oldViewController) {
-        [tabBarViewController.oldViewController willMoveToParentViewController:nil];
-        [tabBarViewController.oldViewController.view removeFromSuperview];
-        [tabBarViewController.oldViewController removeFromParentViewController];
+    if (!previousViewController) {
+        [tabBarViewController addChildViewController:destinationViewController];
+        destinationViewController.view.frame = tabBarViewController.container.bounds;
+        [tabBarViewController.container addSubview:destinationViewController.view];
+        [destinationViewController didMoveToParentViewController:tabBarViewController];
+        
+        return;
     }
     
-    
-    destinationViewController.view.frame = tabBarViewController.container.bounds;
+    [tabBarViewController setIsTransitioning:YES];
+    [previousViewController willMoveToParentViewController:nil];
     [tabBarViewController addChildViewController:destinationViewController];
-    [tabBarViewController.container addSubview:destinationViewController.view];
-    [destinationViewController didMoveToParentViewController:tabBarViewController];
+    
+    CGFloat animationOffset = previousViewController.view.frame.size.width;
+    if ([self animationDirection] == MHTabBarSegueAnimationDirectionRight) {
+        animationOffset = -animationOffset;
+    }
+    
+    CGRect inFrame = CGRectMake(previousViewController.view.frame.origin.x - animationOffset, previousViewController.view.frame.origin.y, previousViewController.view.frame.size.width, previousViewController.view.frame.size.height);
+    CGRect outFrame = CGRectMake(previousViewController.view.frame.origin.x + animationOffset, previousViewController.view.frame.origin.y, previousViewController.view.frame.size.width, previousViewController.view.frame.size.height);
+    
+    destinationViewController.view.frame = inFrame;
+    
+    [tabBarViewController transitionFromViewController: previousViewController toViewController: destinationViewController
+                              duration: 0.25 options:UIViewAnimationOptionCurveEaseOut
+                            animations:^{
+                                destinationViewController.view.frame = previousViewController.view.frame;
+                                previousViewController.view.frame = outFrame;
+                            }
+                            completion:^(BOOL finished) {
+                                [previousViewController removeFromParentViewController];
+                                [destinationViewController didMoveToParentViewController:tabBarViewController];
+                                [tabBarViewController setIsTransitioning:NO];
+                            }];
 }
 
 @end

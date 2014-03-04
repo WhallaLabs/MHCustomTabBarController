@@ -22,6 +22,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef  NS_ENUM(NSUInteger, MHTabBarSegueAnimationDirection) {
+    MHTabBarSegueAnimationDirectionLeft,
+    MHTabBarSegueAnimationDirectionRight
+};
+
 @interface MHTabBarSegue : UIStoryboardSegue
+
+@property (nonatomic, assign) MHTabBarSegueAnimationDirection animationDirection;
 
 @end

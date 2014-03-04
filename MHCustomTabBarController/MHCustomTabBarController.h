@@ -30,6 +30,8 @@
 @property (weak, nonatomic) IBOutlet UIView *container;
 @property (nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 @property (assign, nonatomic) NSInteger selectedIndex;
+@property (nonatomic, assign) BOOL isTransitioning;
 
 - (void)loadViewControllerForSeguegue:(UIStoryboardSegue *)segue triggeredWithButton:(UIButton *)button;
+
 @end
