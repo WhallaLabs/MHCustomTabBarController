@@ -44,6 +44,9 @@
     [previousViewController willMoveToParentViewController:nil];
     [tabBarViewController addChildViewController:destinationViewController];
     
+    [previousViewController beginAppearanceTransition:NO animated:YES];
+    [destinationViewController beginAppearanceTransition:YES animated:YES];
+    
     CGFloat animationOffset = previousViewController.view.frame.size.width;
     if ([self animationDirection] == MHTabBarSegueAnimationDirectionRight) {
         animationOffset = -animationOffset;
@@ -54,17 +57,22 @@
     
     destinationViewController.view.frame = inFrame;
     
-    [tabBarViewController transitionFromViewController: previousViewController toViewController: destinationViewController
-                              duration: 0.25 options:UIViewAnimationOptionCurveEaseOut
-                            animations:^{
-                                destinationViewController.view.frame = previousViewController.view.frame;
-                                previousViewController.view.frame = outFrame;
-                            }
-                            completion:^(BOOL finished) {
-                                [previousViewController removeFromParentViewController];
-                                [destinationViewController didMoveToParentViewController:tabBarViewController];
-                                [tabBarViewController setIsTransitioning:NO];
-                            }];
+    [tabBarViewController.container addSubview:destinationViewController.view];
+    [UIView animateWithDuration:0.25
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         destinationViewController.view.frame = previousViewController.view.frame;
+                         previousViewController.view.frame = outFrame;
+                     } completion:^(BOOL finished){
+                         [previousViewController.view removeFromSuperview];
+                         [previousViewController removeFromParentViewController];
+                         [destinationViewController didMoveToParentViewController:tabBarViewController];
+                         [tabBarViewController setIsTransitioning:NO];
+                         
+                         [previousViewController endAppearanceTransition];
+                         [destinationViewController endAppearanceTransition];
+                     }];
 }
 
 @end
