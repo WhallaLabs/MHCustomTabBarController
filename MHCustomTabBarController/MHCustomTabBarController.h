@@ -31,7 +31,9 @@
 @property (nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 @property (assign, nonatomic) NSInteger selectedIndex;
 @property (nonatomic, assign) BOOL isTransitioning;
+@property (nonatomic, assign, readonly) BOOL animateNextTransition;
 
 - (void)loadViewControllerForSeguegue:(UIStoryboardSegue *)segue triggeredWithButton:(UIButton *)button;
+- (void)setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated;
 
 @end

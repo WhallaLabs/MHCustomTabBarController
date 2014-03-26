@@ -64,6 +64,11 @@
     [self performSegueWithIdentifier:[NSString stringWithFormat:@"viewController%d", selectedIndex] sender:[self.buttons objectAtIndex:selectedIndex]];
 }
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated
+{
+    _animateNextTransition = animated;
+    [self setSelectedIndex:selectedIndex];
+}
 
 #pragma mark - Segue
 - (void)loadViewControllerForSeguegue:(MHTabBarSegue *)segue triggeredWithButton:(UIButton *)button {
@@ -110,6 +115,13 @@
     }
     
     return YES;
+}
+
+- (void)setIsTransitioning:(BOOL)isTransitioning
+{
+    _isTransitioning = isTransitioning;
+    
+    _animateNextTransition = YES;
 }
 
 #pragma mark - Memory Warning
