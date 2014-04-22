@@ -32,10 +32,6 @@
     [super viewDidLoad];
     
     _viewControllersByIdentifier = [NSMutableDictionary dictionary];
-}
-
--(void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     
     if (self.childViewControllers.count < 1) {
         [self setSelectedIndex:0];
