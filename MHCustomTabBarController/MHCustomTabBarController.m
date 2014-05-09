@@ -31,6 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _selectedIndex = -1;
+    
     _viewControllersByIdentifier = [NSMutableDictionary dictionary];
     
     if (self.childViewControllers.count < 1) {
@@ -55,9 +57,11 @@
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex
 {
-    _selectedIndex = selectedIndex;
-    
-    [self performSegueWithIdentifier:[NSString stringWithFormat:@"viewController%d", selectedIndex] sender:[self.buttons objectAtIndex:selectedIndex]];
+    if (selectedIndex != [self selectedIndex]) {
+        _selectedIndex = selectedIndex;
+        
+        [self performSegueWithIdentifier:[NSString stringWithFormat:@"viewController%d", selectedIndex] sender:[self.buttons objectAtIndex:selectedIndex]];
+    }
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex animated:(BOOL)animated
