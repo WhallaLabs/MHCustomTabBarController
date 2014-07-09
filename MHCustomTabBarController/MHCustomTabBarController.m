@@ -24,9 +24,7 @@
 
 #import "MHTabBarSegue.h"
 
-@implementation MHCustomTabBarController {
-    NSMutableDictionary *_viewControllersByIdentifier;
-}
+@implementation MHCustomTabBarController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
